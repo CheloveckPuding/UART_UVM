@@ -10,11 +10,12 @@ module apb_regs (
 	input  logic        tready,
 	output logic [31:0] prdata,
 	// output signals to uart_rx/uart_tx
-	input  logic [31:0] err_rx_dropped,
-	input  logic [31:0] err_rx,
+	input  logic [3:0 ] err_rx_dropped,
+	input  logic [3:0 ] err_rx,
+	input  logic [3:0 ] err_stop,
 	output logic [31:0] delitel,
-	output logic [31:0] parity_bit_mode,
-	output logic [31:0] stop_bit_num
+	output logic [3:0 ] parity_bit_mode,
+	output logic [3:0 ] stop_bit_num
 );
 	
 
@@ -40,7 +41,8 @@ module apb_regs (
 						32'h4  : prdata <= parity_bit_mode;
 						32'h8  : prdata <= stop_bit_num;
 						32'hc  : prdata <= status[3:0]; // err_rx
-						32'h10 : prdata <= status[7:3]; // err_dropped
+						32'h10 : prdata <= status[7:4]; // err_dropped
+						32'h14 : prdata <= status[11:8]; // err_stop
 					endcase
 				end
 			end
@@ -56,10 +58,16 @@ module apb_regs (
 				status[3:0] <= {4{1'b1}}; 
 			end
 			if (err_rx_dropped) begin
-				status[7:3] <= 0;			
+				status[7:4] <= 0;			
 			end
 			else begin
-				status[7:3] <= {4{1'b1}};
+				status[7:4] <= {4{1'b1}};
+			end
+			if (err_stop) begin
+				status[11:8] <= 0;			
+			end
+			else begin
+				status[11:8] <= {4{1'b1}};
 			end
 		end
 	end

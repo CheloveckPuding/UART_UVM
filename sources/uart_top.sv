@@ -23,10 +23,10 @@ module uart_top (
 );
 	
 	logic [31:0] delitel;
-	logic [31:0] parity_bit_mode;
-	logic [31:0] stop_bit_num;
-	logic [31:0] err_rx;
-	logic [31:0] err_tx;
+	logic [3:0 ] parity_bit_mode;
+	logic [3:0 ] stop_bit_num;
+	logic [3:0 ] err_rx;
+	logic [3:0 ] err_tx;
 
 	axis_uart_tx tx 
 	(

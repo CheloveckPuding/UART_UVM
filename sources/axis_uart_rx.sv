@@ -5,18 +5,19 @@ module axis_uart_rx (
 	input  logic         uart_rx,
 	// axis to master
 	input  logic         maxis_tready_i,
-	output logic [7:0]   maxis_data_o,
+	output logic  [7:0]  maxis_data_o,
 	output logic         maxis_tvalid_o,
 	// apb regs
 	input  logic  [31:0] delitel, 
-	input  logic  [31:0] stop_bit_num, 
-	input  logic  [31:0] parity_bit_mode,
+	input  logic  [3:0 ] stop_bit_num, 
+	input  logic  [3:0 ] parity_bit_mode,
 	//err
-	output logic  [31:0] err_rx_dropped,
-	output logic  [31:0] err_rx
+	output logic  [3:0 ] err_rx_dropped,
+	output logic  [3:0 ] err_rx,
+	output logic  [3:0 ] err_stop
 );
 
-	typedef enum {RECIVE, NOT_RECIVE} state_set;
+	typedef enum {NOT_RECIVE, RECIVE} state_set; // change Place
     state_set state, next_state;
     // counters
     logic [3:0 ]  bit_ct;   // ideal counter mean for bits
@@ -25,7 +26,7 @@ module axis_uart_rx (
     logic [3:0 ]  data_ct;  // counter for recieving data
     // uart inside signals
     logic         uart_ce;   // uart signal from sample counter 
-    logic [7:0]   uart_data; // uart data from recieving
+    logic [7:0 ]  uart_data; // uart data from recieving
     logic		  reg_1;
     logic 		  reg_2;
     // from apb regs
@@ -92,6 +93,7 @@ module axis_uart_rx (
 		if(~rst_n) begin
 			uart_data <= 0;
 			err_rx <= 0;
+			err_stop <= 0;
 		end else begin
 			if (uart_ce && state == RECIVE) begin
 				if (data_ct > 4'h0 && data_ct < 4'h9) begin
@@ -121,10 +123,14 @@ module axis_uart_rx (
 						end
 					endcase
 				end
+				if (data_ct >= 4'ha && data_ct) begin
+					if (reg_2 != 1) begin
+						err_stop <= 1;
+					end
+				end
 			end
-			if (state == NOT_RECIVE) begin
+			if (state == NOT_RECIVE || err_rx_dropped) begin
 				uart_data <= 0;
-				err_rx <= 0;
 			end
 		end
 	end
@@ -135,7 +141,7 @@ module axis_uart_rx (
 			maxis_tvalid_o <= 0;
 		end
 		else begin
-			if (data_ct == bit_ct && uart_ce) begin
+			if (data_ct == bit_ct && uart_ce && ~err_rx_dropped) begin
 				maxis_tvalid_o <= 1;
 				maxis_data_o <= uart_data;
 			end
@@ -143,7 +149,8 @@ module axis_uart_rx (
 				maxis_tvalid_o <= 0;
 			end
 			if (err_rx_dropped) begin
-				maxis_tvalid_o <= 1;
+				maxis_tvalid_o <= 0;
+				maxis_data_o <= 0;
 			end
 		end
 	end
@@ -152,10 +159,10 @@ module axis_uart_rx (
 		if (!rst_n) begin
 			err_rx_dropped <= 0;
 		end else begin
-			if (maxis_tvalid_o && state == RECIVE) begin
+			if (maxis_tvalid_o && data_ct == bit_ct && state == RECIVE) begin
 				err_rx_dropped <= 1;
 			end
-			else begin
+			else if(state == NOT_RECIVE) begin
 				err_rx_dropped <= 0;
 			end
 		end
