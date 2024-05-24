@@ -1,4 +1,4 @@
-module apb_regs (
+module apb_uart_regs (
 	input 				clk,    // Clock 
 	input 				rst_n,  // Asynchronous reset active low
 	// apb signals

@@ -21,7 +21,7 @@ delete_fileset sim_1
 add_files -fileset "sources_1" -norecurse "../sources/axis_uart_rx.sv"
 add_files -fileset "sources_1" -norecurse "../sources/axis_uart_tx.sv"
 add_files -fileset "sources_1" -norecurse "../sources/uart_top.sv"
-add_files -fileset "sources_1" -norecurse "../sources/apb_regs.sv"
+add_files -fileset "sources_1" -norecurse "../sources/apb_uart_regs.sv"
 add_files -fileset "Test_UART" -norecurse "../sim/axis_if.sv"
 add_files -fileset "Test_UART" -norecurse "../sim/apb_if.sv"
 add_files -fileset "Test_UART" -norecurse "../sim/tb_UART.sv"

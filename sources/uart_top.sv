@@ -54,7 +54,7 @@ module uart_top (
 		.parity_bit_mode(parity_bit_mode)
 	);
 
-	apb_regs regs
+	apb_uart_regs regs
 	(
 		.pwrite(pwrite),
 		.psel(psel),
