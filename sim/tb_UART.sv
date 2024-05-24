@@ -17,13 +17,15 @@ module TB ();
 	logic [31:0]    	   			parity_bit_mode;
 	logic [31:0]    	   			err_rx_dropped;
 	logic [31:0]    	   			err_rx;
+	logic							err_stop;
 	logic 		    	   			tready;
 	logic [DATA_WIDTH-1:0] 			data [];	
 	int 				 			taken_data [];
 	logic [3:0]			   			error;
 	logic [$clog2(MESSAGES)-1:0]	correct_ct;
-	logic [3:0]						status_parity;
-	logic [3:0]						status_dropped;
+	logic 							status_parity;
+	logic 							status_dropped;
+	logic 							status_stop;
 
 	initial begin
 		clk = 0;
@@ -120,7 +122,8 @@ module TB ();
 		.stop_bit_num(stop_bit_num),
 		.parity_bit_mode(parity_bit_mode),
 		.err_rx_dropped(err_rx_dropped),
-		.err_rx(err_rx)
+		.err_rx(err_rx),
+		.err_stop(err_stop)
 	);
 
 	//tx
@@ -151,6 +154,7 @@ module TB ();
 		.prdata(u_apb_if.prdata),
 		.err_rx_dropped(err_rx_dropped),
 		.err_rx(err_rx),
+		.err_stop(err_stop),
 		.delitel(delitel),
 		.parity_bit_mode(parity_bit_mode),
 		.stop_bit_num(stop_bit_num)

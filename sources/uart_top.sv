@@ -23,10 +23,11 @@ module uart_top (
 );
 	
 	logic [31:0] delitel;
-	logic [3:0 ] parity_bit_mode;
-	logic [3:0 ] stop_bit_num;
-	logic [3:0 ] err_rx;
-	logic [3:0 ] err_tx;
+	logic [2:0 ] parity_bit_mode;
+	logic 		 stop_bit_num;
+	logic 		 err_rx;
+	logic		 err_rx_dropped;
+	logic		 err_stop;
 
 	axis_uart_tx tx 
 	(
@@ -51,7 +52,10 @@ module uart_top (
 		.maxis_tvalid_o(maxis_tvalid_o),
 		.delitel(delitel),
 		.stop_bit_num(stop_bit_num),
-		.parity_bit_mode(parity_bit_mode)
+		.parity_bit_mode(parity_bit_mode),
+		.err_rx_dropped(err_rx_dropped),
+		.err_rx(err_rx),
+		.err_stop(err_stop)
 	);
 
 	apb_uart_regs regs
@@ -63,9 +67,9 @@ module uart_top (
 		.pwdata(pwdata),
 		.tready(tready),
 		.prdata(prdata),
-		.uart_tx(uart_tx),
-		.err_tx(err_tx),
 		.err_rx(err_rx),
+		.err_rx_dropped(err_rx_dropped),
+		.err_stop(err_stop),
 		.delitel(delitel),
 		.parity_bit_mode(parity_bit_mode),
 		.stop_bit_num(stop_bit_num)

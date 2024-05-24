@@ -9,12 +9,12 @@ module axis_uart_rx (
 	output logic         maxis_tvalid_o,
 	// apb regs
 	input  logic  [31:0] delitel, 
-	input  logic  [3:0 ] stop_bit_num, 
-	input  logic  [3:0 ] parity_bit_mode,
+	input  logic  		 stop_bit_num, 
+	input  logic  [2:0 ] parity_bit_mode,
 	//err
-	output logic  [3:0 ] err_rx_dropped,
-	output logic  [3:0 ] err_rx,
-	output logic  [3:0 ] err_stop
+	output logic  		 err_rx_dropped,
+	output logic  		 err_rx,
+	output logic  		 err_stop
 );
 
 	typedef enum {NOT_RECIVE, RECIVE} state_set; // change Place
@@ -177,7 +177,7 @@ module axis_uart_rx (
     	end else begin 
 	    	if (state == NOT_RECIVE) begin
 	    		div_ct <= delitel;
-	    		if (stop_bit_num == 2'h2) begin
+	    		if (stop_bit_num) begin
 	    			bit_ct <= 4'hb;
 	    		end
 	    		else begin 
