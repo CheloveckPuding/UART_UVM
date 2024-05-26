@@ -1,7 +1,10 @@
 `include "uvm_macros.svh"
 import uvm_pkg::*;
+`include "uvm_uart_env.sv"
 class uvm_uart_base_test extends uvm_test;
 	`uvm_component_utils(uvm_uart_base_test)
+
+	uvm_uart_env env;
 
 	function new(string name = "uvm_uart_base_test", uvm_component parent=null);
 		super.new(name, parent);
@@ -9,6 +12,7 @@ class uvm_uart_base_test extends uvm_test;
 
 	function void build_phase(uvm_phase phase);
 		super.build_phase(phase);
+		env = uvm_uart_env::type_id::create("env", this);
 	endfunction : build_phase
 
 	task run_phase(uvm_phase phase);
