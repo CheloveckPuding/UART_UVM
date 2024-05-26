@@ -17,11 +17,11 @@ class uvm_uart_env extends uvm_env;
 	//run_phase
 	task run_phase(uvm_phase phase);
 		phase.raise_objection(this);
-		`uvm_info("Env",$sformatf("ENV is running %0d"), $time)
+		`uvm_info("Env",$sformatf("ENV is running"), $time)
 		#10;
-		`uvm_info("Env",$sformatf("ENV is still running %0d"), $time)
+		`uvm_info("Env",$sformatf("ENV is still running"), $time)
 		#20;
-		`uvm_info("Env",$sformatf("ENV is ending %0d"),$time)
+		`uvm_info("Env",$sformatf("ENV is ending"),$time)
 		phase.drop_objection(this);
 	endtask : run_phase
 endclass : uvm_uart_env

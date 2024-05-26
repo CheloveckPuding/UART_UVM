@@ -1,0 +1,6 @@
+[submodule "AXIS_UVM_Agent"]
+	path = AXIS_UVM_Agent
+	url = https://github.com/VSHEV92/AXIS_UVM_Agent.git
+[submodule "UART"]
+	path = UART
+	url = https://github.com/darthsider/UART.git
