@@ -19,14 +19,11 @@ create_fileset -simset "Test_UVM"
 current_fileset -simset [get_filesets Test_UVM]
 delete_fileset sim_1
 
-add_files -fileset "sources_1" -norecurse "$origin_dir/../sources/axis_uart_rx.sv"
-add_files -fileset "sources_1" -norecurse "$origin_dir/../sources/axis_uart_tx.sv"
-add_files -fileset "sources_1" -norecurse "$origin_dir/../sources/uart_top.sv"
-add_files -fileset "sources_1" -norecurse "$origin_dir/../sources/apb_uart_regs.sv"
+add_files -fileset "sources_1" -norecurse "$origin_dir/../sources/"
 add_files -fileset "Test_UART" -norecurse "$origin_dir/../sim/axis_if.sv"
 add_files -fileset "Test_UART" -norecurse "$origin_dir/../sim/apb_if.sv"
 add_files -fileset "Test_UART" -norecurse "$origin_dir/../sim/tb_UART.sv"
-add_files -fileset "Test_UVM" -norecurse "$origin_dir/../sim/uvm_uart_base_test.sv"
+add_files -fileset "Test_UVM" -norecurse "$origin_dir/../sim/UVM/"
 add_files -fileset "Test_UVM" -norecurse "$origin_dir/../sim/testbench_UVM.sv"
 
 
