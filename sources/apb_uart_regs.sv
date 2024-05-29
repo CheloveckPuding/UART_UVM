@@ -40,9 +40,7 @@ module apb_uart_regs (
 						32'h0  : prdata <= delitel;
 						32'h4  : prdata <= parity_bit_mode;
 						32'h8  : prdata <= stop_bit_num;
-						32'hc  : prdata <= status[0]; // err_rx
-						32'h10 : prdata <= status[1]; // err_dropped
-						32'h14 : prdata <= status[2]; // err_stop
+						32'hc  : prdata <= status;
 					endcase
 				end
 			end
@@ -52,17 +50,23 @@ module apb_uart_regs (
 		if (!rst_n) begin
 			status <= {4{1'b0}};
 		end else begin
-			status[0] <= err_rx;
-			status[1] <= err_rx_dropped;
-			status[2] <= err_stop;
-			if (pwdata == 1) begin
-				if (paddr == 32'hc && status[0]) begin
+			if (err_rx) begin
+				status[0] <= 1;
+			end
+			if (err_rx_dropped) begin
+				status[1] <= 1;
+			end
+			if (err_stop) begin
+				status[2] <= 1;
+			end
+			if (paddr == 32'hc && psel && penable && pwrite) begin
+				if (pwdata[0]) begin
 					status[0] <= 0;
 				end
-				if (paddr == 32'h10 && status[1]) begin
+				if (pwdata[1]) begin
 					status[1] <= 0;
 				end
-				if (paddr == 32'h14 && status[2]) begin
+				if (pwdata[2]) begin
 					status[2] <= 0;
 				end
 			end
