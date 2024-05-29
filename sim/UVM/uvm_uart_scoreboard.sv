@@ -1,6 +1,6 @@
 `include "uvm_macros.svh"
 import uvm_pkg::*;
-class uvm_uart_scoreboard extends  uvm_uart_scoreboard;
+class uvm_uart_scoreboard extends  uvm_scoreboard;
 
 /*-------------------------------------------------------------------------------
 -- Interface, port, fields
@@ -26,8 +26,7 @@ class uvm_uart_scoreboard extends  uvm_uart_scoreboard;
 	endfunction : build_phase
 
 	task run_phase(uvm_phase phase);
-		super.run_phase(phase);
-		`uvm_info("Scoreboard","Scoreboard is running", )
+		`uvm_info("Scoreboard","Scoreboard is running", $time())
 	endtask : run_phase
 
 endclass : uvm_uart_scoreboard

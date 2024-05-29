@@ -1,8 +1,11 @@
 `include "uvm_macros.svh"
+`include "uvm_uart_scoreboard.sv"
 import uvm_pkg::*;
 class uvm_uart_env extends uvm_env;
 	
 	`uvm_component_utils(uvm_uart_env)
+
+	uvm_uart_scoreboard sbd;
 
 	// constructor
 	function new(string name = "uvm_uart_env", uvm_component parent);
@@ -12,6 +15,7 @@ class uvm_uart_env extends uvm_env;
 	//build_phase
 	function void build_phase(uvm_phase phase);
 		super.build_phase(phase);
+		sbd = uvm_uart_scoreboard::type_id::create("sbd", this);
 	endfunction : build_phase
 
 	//run_phase

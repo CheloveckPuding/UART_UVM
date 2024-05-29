@@ -1,4 +1,4 @@
-`include "uvm_uart_base_test.sv" 
+`include "./UVM/uvm_uart_base_test.sv" 
 import uvm_pkg::*;
 `include "uvm_macros.svh"
 module testbench_UVM ();
