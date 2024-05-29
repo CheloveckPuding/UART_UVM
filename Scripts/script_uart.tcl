@@ -1,4 +1,4 @@
-set project_name "UART"
+set project_name "UART_UVM_PROJECT"
 
 set project_found [ llength [get_projects $project_name] ]
 if {$project_found > 0} close_project
