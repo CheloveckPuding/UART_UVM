@@ -5,7 +5,7 @@ class apb_agent extends uvm_agent;
    apb_driver drv;
    apb_monitor mon;
 
-   virtual dut_if  vif;
+   virtual apb_if  apb_if_u;
 
    `uvm_component_utils_begin(apb_agent)
       `uvm_field_object(sqr, UVM_ALL_ON)
@@ -25,12 +25,12 @@ class apb_agent extends uvm_agent;
       drv = apb_driver::type_id::create("drv", this);
       mon = apb_monitor::type_id::create("mon", this);
       
-     if (!uvm_config_db#(virtual dut_if)::get(this, "", "vif", vif)) begin
+     if (!uvm_config_db#(virtual apb_if)::get(this, "", "apb_if_u", apb_if_u)) begin
        `uvm_fatal("build phase", "No virtual interface specified for this agent instance")
       end
-     uvm_config_db#(virtual dut_if)::set( this, "sqr", "vif", vif);
-     uvm_config_db#(virtual dut_if)::set( this, "drv", "vif", vif);
-     uvm_config_db#(virtual dut_if)::set( this, "mon", "vif", vif);
+     uvm_config_db#(virtual apb_if)::set( this, "sqr", "apb_if_u", apb_if_u);
+     uvm_config_db#(virtual apb_if)::set( this, "drv", "apb_if_u", apb_if_u);
+     uvm_config_db#(virtual apb_if)::set( this, "mon", "apb_if_u", apb_if_u);
    endfunction
 
    //Connect - driver and sequencer port to export

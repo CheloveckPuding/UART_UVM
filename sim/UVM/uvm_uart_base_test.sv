@@ -1,6 +1,7 @@
 `include "uvm_macros.svh"
 import uvm_pkg::*;
 `include "uvm_uart_env.sv"
+`include "../../AXIS_UVM_Agent/src/axis_intf.sv"
 class uvm_uart_base_test extends uvm_test;
 	`uvm_component_utils(uvm_uart_base_test)
 
