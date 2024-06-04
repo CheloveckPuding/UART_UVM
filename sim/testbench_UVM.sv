@@ -10,7 +10,7 @@ module testbench_UVM ();
 
     bit aclk = 0;
     axis_if #(TDATA_BYTES_IN)  axis_in  (aclk);
-    axis_if #(TDATA_BYTES_OUT) axis_out (aclk);
+    // axis_if #(TDATA_BYTES_OUT) axis_out (aclk);
     apb_if 					   apb_if_u ();
     
     always 
@@ -18,7 +18,7 @@ module testbench_UVM ();
 	
 	initial begin
 		uvm_config_db #(virtual axis_if #(TDATA_BYTES_IN ))::set(null, "*", "axis_in", axis_in);
-        uvm_config_db #(virtual axis_if #(TDATA_BYTES_OUT))::set(null, "*", "axis_out", axis_out);
+        // uvm_config_db #(virtual axis_if #(TDATA_BYTES_OUT))::set(null, "*", "axis_out", axis_out);
         uvm_config_db #(virtual apb_if 					  )::set(null, "*", "apb_if_u", apb_if_u);
 		run_test("uvm_uart_base_test");
 	end

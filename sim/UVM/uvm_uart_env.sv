@@ -14,15 +14,15 @@ class uvm_uart_env extends uvm_env;
 
 
     localparam TDATA_BYTES_IN = 4;
-    localparam TDATA_BYTES_OUT = 10;
+    // localparam TDATA_BYTES_OUT = 10;
 
     virtual axis_if #(TDATA_BYTES_IN) axis_in;
-    virtual axis_if #(TDATA_BYTES_OUT) axis_out;
+    // virtual axis_if #(TDATA_BYTES_OUT) axis_out;
     virtual apb_if 					   apb_if_u;
 
 	uvm_uart_scoreboard sbd;
-	axis_agent axis_agent_master;
-	axis_agent axis_agent_slave;
+	axis_agent axis_agent_in_1;
+	// axis_agent axis_agent_slave;
 	apb_agent apb_agent_u;
 
 	// constructor
@@ -36,16 +36,29 @@ class uvm_uart_env extends uvm_env;
 		if (!uvm_config_db #(virtual axis_if #(TDATA_BYTES_IN))::get(this, "", "axis_in", axis_in))
         	`uvm_fatal("GET_DB", "Can not get axis_in_1")
 
-	    if (!uvm_config_db #(virtual axis_if #(TDATA_BYTES_OUT))::get(this, "", "axis_out", axis_out))
-	        `uvm_fatal("GET_DB", "Can not get axis_out")        
+	    // if (!uvm_config_db #(virtual axis_if #(TDATA_BYTES_OUT))::get(this, "", "axis_out", axis_out))
+	    //     `uvm_fatal("GET_DB", "Can not get axis_out")        
 
 	    if (!uvm_config_db #(virtual apb_if 				   )::get(this, "", "apb_if_u", apb_if_u))
-	        `uvm_fatal("GET_DB", "Can not get axis_out")        
+	        `uvm_fatal("GET_DB", "Can not get apb_if")        
 
 		sbd = uvm_uart_scoreboard::type_id::create("sbd", this);
-		axis_agent_master = axis_agent::type_id::create("axis_agent_master", this);
-		axis_agent_slave = axis_agent::type_id::create("axis_agent_slave", this);
+		// axis_agent_master = axis_agent #(TDATA_BYTES_IN)::type_id::create("axis_agent_master", this);
+		// axis_agent_slave = axis_agent::type_id::create("axis_agent_slave", this);
 		apb_agent_u = apb_agent::type_id::create("apb_agent_u", this);
+
+		// axis_agent_master.agent_type = MASTER;
+
+		// axis_agent_master.axis_if_h = this.axis_in;
+
+		axis_agent_in_1 = axis_agent::type_id::create("axis_agent_in_1", this);
+
+    // set agent's types
+    axis_agent_in_1.agent_type = MASTER;
+
+    // connect interfaces
+    // axis_agent_in_1.axis_if_h = axis_in;
+
 	endfunction : build_phase
 
 	//run_phase
