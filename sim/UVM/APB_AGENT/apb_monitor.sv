@@ -50,7 +50,7 @@ class apb_monitor extends uvm_monitor;
          tr.data = this.apb_if_u.monitor_cb.pwdata;
        end
        
-         uvm_report_info("APB_MONITOR", $psprintf("Got Transaction %s",tr.convert2string()));
+         uvm_report_info("APB_MONITOR", $sformatf("Got Transaction %s",tr.convert2string()));
          //Write to analysis port
          ap.write(tr);
       end

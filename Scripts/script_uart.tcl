@@ -20,7 +20,7 @@ current_fileset -simset [get_filesets Test_UVM]
 delete_fileset sim_1
 
 add_files -fileset "sources_1" -norecurse "UART_UVM/sources/"
-add_files -fileset "Test_UART" -norecurse "UART_UVM/sim/"
+add_files -fileset "Test_UART" -norecurse "UART_UVM/sim/tb_UART.sv"
 add_files -fileset "Test_UVM" -norecurse "UART_UVM/sim/UVM/"
 add_files -fileset "Test_UVM" -norecurse "UART_UVM/sim/testbench_UVM.sv"
 

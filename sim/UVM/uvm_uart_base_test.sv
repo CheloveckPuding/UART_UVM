@@ -17,6 +17,7 @@ class uvm_uart_base_test extends uvm_test;
 
 	task run_phase(uvm_phase phase);
 		phase.raise_objection(this);
+		uvm_top.print_topology();
 		`uvm_info("Test","Test is running %0d", $time)
 		#10;
 		`uvm_info("Test","Test is still running %0d", $time)

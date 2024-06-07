@@ -27,7 +27,7 @@ class apb_driver extends uvm_driver#(apb_transaction);
       //First get an item from sequencer
       seq_item_port.get_next_item(tr);
       @ (this.apb_if_u.master_cb);
-      uvm_report_info("APB_DRIVER ", $psprintf("Got Transaction %s",tr.convert2string()));
+      uvm_report_info("APB_DRIVER ", $sformatf("Got Transaction %s",tr.convert2string()));
       //Decode the APB Command and call either the read/write function
       case (tr.pwrite)
         apb_transaction::READ:  drive_read(tr.addr, tr.data);  
