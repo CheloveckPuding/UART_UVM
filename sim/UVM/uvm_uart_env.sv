@@ -14,7 +14,7 @@ class uvm_uart_env extends uvm_env;
 
     virtual axis_if axis_in;
     virtual axis_if axis_out;
-    virtual apb_if 					   apb_if_u;
+    virtual apb_if 	apb_if_u;
 
 	uvm_uart_scoreboard sbd;
 	axis_agent axis_agent_master;
@@ -35,7 +35,7 @@ class uvm_uart_env extends uvm_env;
 	    if (!uvm_config_db #(virtual axis_if)::get(this, "", "axis_out", axis_out))
 	        `uvm_fatal("GET_DB", "Can not get axis_out")        
 
-	    if (!uvm_config_db #(virtual apb_if 				   )::get(this, "", "apb_if_u", apb_if_u))
+	    if (!uvm_config_db #(virtual apb_if  )::get(this, "", "apb_if_u", apb_if_u))
 	        `uvm_fatal("GET_DB", "Can not get apb_if")        
 
 		sbd = uvm_uart_scoreboard::type_id::create("sbd", this);
@@ -52,13 +52,13 @@ class uvm_uart_env extends uvm_env;
 	endfunction : build_phase
 
 	//run_phase
-	task run_phase(uvm_phase phase);
-		phase.raise_objection(this);
-		`uvm_info("Env",$sformatf("ENV is running"), $time)
-		#10;
-		`uvm_info("Env",$sformatf("ENV is still running"), $time)
-		#20;
-		`uvm_info("Env",$sformatf("ENV is ending"),$time)
-		phase.drop_objection(this);
-	endtask : run_phase
+	// task run_phase(uvm_phase phase);
+	// 	phase.raise_objection(this);
+	// 	`uvm_info("Env",$sformatf("ENV is running"), $time)
+	// 	#10;
+	// 	`uvm_info("Env",$sformatf("ENV is still running"), $time)
+	// 	#20;
+	// 	`uvm_info("Env",$sformatf("ENV is ending"),$time)
+	// 	phase.drop_objection(this);
+	// endtask : run_phase
 endclass : uvm_uart_env

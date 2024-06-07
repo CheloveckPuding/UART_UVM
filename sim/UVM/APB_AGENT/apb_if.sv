@@ -1,6 +1,5 @@
-interface apb_if;
+interface apb_if (input pclk);
 
-  logic pclk;
   logic rst_n;
   logic [31:0] paddr;
   logic psel;

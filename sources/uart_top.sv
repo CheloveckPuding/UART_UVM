@@ -60,6 +60,8 @@ module uart_top (
 
 	apb_uart_regs regs
 	(
+		.clk(clk),
+		.rst_n(rst_n),
 		.pwrite(pwrite),
 		.psel(psel),
 		.penable(penable),
