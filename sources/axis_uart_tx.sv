@@ -9,8 +9,8 @@ module axis_uart_tx (
 	output logic         saxis_tready_o,
 	// apb regs
 	input  logic  [31:0] delitel, 
-	input  logic  [3:0 ] stop_bit_num, 
-	input  logic  [3:0 ] parity_bit_mode
+	input  logic  		 stop_bit_num, 
+	input  logic  [2:0 ] parity_bit_mode
 );
 
 	typedef enum {NO_TRANCIVE, TRANCIVE} state_set; // change place
@@ -52,7 +52,6 @@ module axis_uart_tx (
 	// trancieve data
 	always @(posedge clk or negedge rst_n) begin
 		if(~rst_n) begin
-			bit_ct <= 0;
 			data_ct <= 0;
 			uart_data <= 0;
 		end else begin
@@ -116,7 +115,7 @@ module axis_uart_tx (
     	end else begin 
 	    	if (state == NO_TRANCIVE) begin
 	    		div_ct <= delitel;
-	    		if (stop_bit_num == 2'h2) begin
+	    		if (stop_bit_num) begin
 	    			bit_ct <= 4'hb;
 	    		end
 	    		else begin 

@@ -22,6 +22,8 @@ module testbench_UVM ();
 	end
 
     initial begin
+        apb_if_u.rst_n = rst_n;
+        apb_if_u.pready = 1;
         @(posedge clk);
         rst_n = 0;
         @(posedge clk);
@@ -46,7 +48,7 @@ module testbench_UVM ();
         .saxis_tvalid_i(axis_in.tvalid),
         .saxis_data_i(axis_in.tdata),
         .saxis_tready_o(axis_in.tready),
-        .uart_rx(uart_rx),
+        .uart_rx(uart_tx),
         .uart_tx(uart_tx)
     );
 
