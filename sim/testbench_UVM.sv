@@ -23,7 +23,6 @@ module testbench_UVM ();
 
     initial begin
         apb_if_u.rst_n = rst_n;
-        apb_if_u.pready = 1;
         @(posedge clk);
         rst_n = 0;
         @(posedge clk);
@@ -42,6 +41,7 @@ module testbench_UVM ();
         .paddr(apb_if_u.paddr),
         .pwdata(apb_if_u.pwdata),
         .prdata(apb_if_u.prdata),
+        .pready(apb_if_u.pready),
         .maxis_tready_i(axis_out.tready),
         .maxis_tvalid_o(axis_out.tvalid),
         .maxis_data_o(axis_out.tdata),

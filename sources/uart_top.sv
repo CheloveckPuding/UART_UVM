@@ -8,6 +8,7 @@ module uart_top (
 	input  logic [31:0] paddr,
 	input  logic [31:0] pwdata,
 	output logic [31:0] prdata,
+	output logic        pready,
 	// AXIS signals
 	// master
 	input  logic        maxis_tready_i,
@@ -67,7 +68,7 @@ module uart_top (
 		.penable(penable),
 		.paddr(paddr),
 		.pwdata(pwdata),
-		.tready(tready),
+		.pready(pready),
 		.prdata(prdata),
 		.err_rx(err_rx),
 		.err_rx_dropped(err_rx_dropped),

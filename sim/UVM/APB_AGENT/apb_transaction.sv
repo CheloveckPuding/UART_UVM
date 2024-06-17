@@ -8,8 +8,8 @@ class apb_transaction extends uvm_sequence_item;
   rand bit [31:0] data;     //Data - For write or read response
   rand kind_e  pwrite;       //command type
   
-  constraint c1{addr[31:0]>=32'd0; addr[31:0] <=32'd12;};
-  constraint c2{data[31:0]>=32'd0; data[31:0] <32'd256;};
+  constraint c1{soft addr[31:0]>=32'd0; soft addr[31:0] <=32'd12;};
+  constraint c2{soft data[31:0]>=32'd0; soft data[31:0] <32'd256;};
   
   function new (string name = "apb_transaction");
     super.new(name);

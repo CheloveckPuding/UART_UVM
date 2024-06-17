@@ -1,6 +1,7 @@
 `include "uvm_macros.svh"
 import uvm_pkg::*;
 `include "uvm_uart_env.sv"
+`include "uvm_apb_uart_cfg_sequence.sv"
 class uvm_uart_base_test extends uvm_test;
 	`uvm_component_utils(uvm_uart_base_test)
 
@@ -39,21 +40,15 @@ class uvm_uart_base_test extends uvm_test;
 	    phase.drop_objection(this);
 	endtask
 
-	task run_phase(uvm_phase phase);
-		// phase.raise_objection(this);
-		// uvm_top.print_topology();
-		// `uvm_info("Test","Test is running %0d", $time)
-		// #10;
-		// `uvm_info("Test","Test is still running %0d", $time)
-		// #20;
-		// `uvm_info("Test","Test is ending %0d",$time)
-		// phase.drop_objection(this);
-	    apb_sequence apb_seq;
-	    apb_seq = apb_sequence::type_id::create("apb_seq");
-	    phase.raise_objection( this, "Starting apb_base_seqin main phase" );
-	    $display("%t Starting sequence apb_seq run_phase",$time);
-	    apb_seq.start(env.apb_agent_u.sqr);
-	    #100ns;
-	    phase.drop_objection( this , "Finished apb_seq in main phase" );
-	endtask : run_phase
+	task configure_phase(uvm_phase phase);
+		 	uvm_apb_uart_cfg_sequence apb_seq;
+		    apb_seq = uvm_apb_uart_cfg_sequence::type_id::create("apb_seq");
+		    assert(apb_seq.randomize() with {delitel < 15;});
+		    phase.raise_objection( this, "Starting apb_base_seqin main phase" );
+		    $display("%t Starting sequence apb_seq run_phase",$time);
+		    apb_seq.start(env.apb_agent_u.sqr);
+		    #100ns;
+		    phase.drop_objection( this , "Finished apb_seq in main phase" );
+	endtask : configure_phase
+
 endclass : uvm_uart_base_test

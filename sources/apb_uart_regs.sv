@@ -7,7 +7,7 @@ module apb_uart_regs (
 	input  logic        penable,
 	input  logic [31:0] paddr,
 	input  logic [31:0] pwdata,
-	input  logic        tready,
+	output  logic        pready,
 	output logic [31:0] prdata,
 	// output signals to uart_rx/uart_tx
 	input  logic  		err_rx_dropped,
@@ -20,6 +20,7 @@ module apb_uart_regs (
 	
 
 	logic [3:0] status;
+	assign pready = 1;
 	
 	always @ (posedge clk or negedge rst_n) begin 
 		if (!rst_n) begin
@@ -27,7 +28,7 @@ module apb_uart_regs (
 			parity_bit_mode <= 0;
 			stop_bit_num 	<= 0;
 		end else begin 
-			if (psel && penable && tready) begin
+			if (psel && penable && pready) begin
 				if (pwrite) begin
 					case (paddr)
 						32'h0 : delitel 	    <= pwdata;
