@@ -7,6 +7,7 @@
 `include "APB_AGENT/apb_driver.sv"
 `include "APB_AGENT/apb_monitor.sv"
 `include "APB_AGENT/apb_agent.sv"
+`include "../../UART/UVM/uart_include.sv"
 import uvm_pkg::*;
 class uvm_uart_env extends uvm_env;
 	
