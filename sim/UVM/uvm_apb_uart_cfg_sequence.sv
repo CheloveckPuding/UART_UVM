@@ -5,7 +5,8 @@ class uvm_apb_uart_cfg_sequence extends uvm_sequence#(apb_transaction);
   rand logic [31:0] delitel;
   rand logic [2:0 ] parity_bit_mode;
   rand logic        stop_bit_num;
-  apb_transaction transactions [3];
+  rand logic        loopback;
+  apb_transaction transactions [4];
 
   constraint cfg {
     delitel > 32'h0;
@@ -34,6 +35,11 @@ class uvm_apb_uart_cfg_sequence extends uvm_sequence#(apb_transaction);
       assert(transactions[2].randomize() with {
         addr==32'h8;
         data==stop_bit_num;
+        pwrite==1;
+      });
+      assert(transactions[3].randomize() with {
+        addr==32'hc;
+        data==loopback;
         pwrite==1;
       });
       foreach(transactions[i]) begin

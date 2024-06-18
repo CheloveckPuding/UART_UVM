@@ -29,12 +29,26 @@ module uart_top (
 	logic 		 err_rx;
 	logic		 err_rx_dropped;
 	logic		 err_stop;
+	logic		 loopback;
+	logic		 tx;
+	logic		 rx;
+
+	always_comb begin
+		if (loopback) begin
+			tx = rx;
+		end
+		else begin
+			uart_tx = tx;
+			rx = uart_rx;
+		end
+	end
+
 
 	axis_uart_tx tx 
 	(
 		.clk(clk),
 		.rst_n(rst_n),
-		.uart_tx(uart_tx),
+		.uart_tx(tx),
 		.saxis_data_i(saxis_data_i),
 		.saxis_tvalid_i(saxis_tvalid_i),
 		.saxis_tready_o(saxis_tready_o),
@@ -47,7 +61,7 @@ module uart_top (
 	(
 		.clk(clk),
 		.rst_n(rst_n),
-		.uart_rx(uart_rx),
+		.uart_rx(rx),
 		.maxis_tready_i(maxis_tready_i),
 		.maxis_data_o(maxis_data_o),
 		.maxis_tvalid_o(maxis_tvalid_o),
@@ -75,7 +89,8 @@ module uart_top (
 		.err_stop(err_stop),
 		.delitel(delitel),
 		.parity_bit_mode(parity_bit_mode),
-		.stop_bit_num(stop_bit_num)
+		.stop_bit_num(stop_bit_num),
+		.loopback(loopback)
 	);
 	
 

@@ -1,6 +1,7 @@
 `include "UVM/uvm_uart_base_test.sv" 
 `include "../AXIS_UVM_Agent/src/axis_intf.sv"
 `include "UVM/APB_AGENT/apb_if.sv"
+`include "../UART/UVM/uart_intf.sv"
 import uvm_pkg::*;
 `include "uvm_macros.svh"
 module testbench_UVM ();
@@ -8,9 +9,10 @@ module testbench_UVM ();
 
     bit clk = 0;
     bit rst_n = 1;
-    axis_if  axis_in  (clk);
-    axis_if  axis_out (clk);
-    apb_if   apb_if_u (clk);
+    axis_if   axis_in  (clk);
+    axis_if   axis_out (clk);
+    apb_if    apb_if_u (clk);
+    uart_intf uart_intf_u      (clk);
     
     always #(CLOCK_PERIOD/2) clk = ~clk;
 	
@@ -18,6 +20,7 @@ module testbench_UVM ();
 		uvm_config_db #(virtual axis_if)::set(null, "*", "axis_in",  axis_in);
         uvm_config_db #(virtual axis_if)::set(null, "*", "axis_out", axis_out);
         uvm_config_db #(virtual apb_if )::set(null, "*", "apb_if_u", apb_if_u);
+        uvm_config_db #(virtual uart_intf )::set(null, "*", "uart_intf_u", uart_intf_u);
 		run_test("uvm_uart_base_test");
 	end
 
@@ -48,8 +51,8 @@ module testbench_UVM ();
         .saxis_tvalid_i(axis_in.tvalid),
         .saxis_data_i(axis_in.tdata),
         .saxis_tready_o(axis_in.tready),
-        .uart_rx(uart_tx),
-        .uart_tx(uart_tx)
+        .uart_rx(uart_intf_u.tx),
+        .uart_tx(uart_intf_u.rx)
     );
 
 endmodule : testbench_UVM

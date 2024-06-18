@@ -15,7 +15,8 @@ module apb_uart_regs (
 	input  logic  		err_stop,
 	output logic [31:0] delitel,
 	output logic [2:0 ] parity_bit_mode,
-	output logic  		stop_bit_num
+	output logic  		stop_bit_num,
+	output logic  		loopback
 );
 	
 
@@ -27,6 +28,7 @@ module apb_uart_regs (
 			delitel 	    <= 0;
 			parity_bit_mode <= 0;
 			stop_bit_num 	<= 0;
+			loopback        <= 0;
 		end else begin 
 			if (psel && penable && pready) begin
 				if (pwrite) begin
@@ -34,6 +36,7 @@ module apb_uart_regs (
 						32'h0 : delitel 	    <= pwdata;
 						32'h4 : parity_bit_mode <= pwdata;
 						32'h8 : stop_bit_num 	<= pwdata;
+						32'hc : loopback        <= pwdata; 
 					endcase
 				end
 				else begin 
@@ -41,7 +44,8 @@ module apb_uart_regs (
 						32'h0  : prdata <= delitel;
 						32'h4  : prdata <= parity_bit_mode;
 						32'h8  : prdata <= stop_bit_num;
-						32'hc  : prdata <= status;
+						32'hc  : prdata <= loopback;
+						32'h10 : prdata <= status;
 					endcase
 				end
 			end

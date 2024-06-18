@@ -16,11 +16,13 @@ class uvm_uart_env extends uvm_env;
     virtual axis_if axis_in;
     virtual axis_if axis_out;
     virtual apb_if 	apb_if_u;
+    virtual uart_intf uart_intf_u;
 
 	uvm_uart_scoreboard sbd;
 	axis_agent axis_agent_master;
 	axis_agent axis_agent_slave;
 	apb_agent apb_agent_u;
+	uart_agent uart_agent_u;
 
 	// constructor
 	function new(string name = "uvm_uart_env", uvm_component parent);
@@ -37,12 +39,17 @@ class uvm_uart_env extends uvm_env;
 	        `uvm_fatal("GET_DB", "Can not get axis_out")        
 
 	    if (!uvm_config_db #(virtual apb_if  )::get(this, "", "apb_if_u", apb_if_u))
-	        `uvm_fatal("GET_DB", "Can not get apb_if")        
+	        `uvm_fatal("GET_DB", "Can not get apb_if")
+
+	    if (!uvm_config_db #(virtual uart_intf  )::get(this, "", "uart_intf_u", uart_intf_u))
+	        `uvm_fatal("GET_DB", "Can not get uart_intf_u")        
 
 		sbd = uvm_uart_scoreboard::type_id::create("sbd", this);
 		axis_agent_master = axis_agent::type_id::create("axis_agent_master", this);
 		axis_agent_slave = axis_agent::type_id::create("axis_agent_slave", this);
 		apb_agent_u = apb_agent::type_id::create("apb_agent_u", this);
+		uart_agent_u = uart_agent::type_id::create("uart_agent_u", this);
+
 
 		axis_agent_master.agent_type = MASTER;
 		axis_agent_slave.agent_type = SLAVE;
@@ -52,14 +59,11 @@ class uvm_uart_env extends uvm_env;
 
 	endfunction : build_phase
 
-	//run_phase
-	// task run_phase(uvm_phase phase);
-	// 	phase.raise_objection(this);
-	// 	`uvm_info("Env",$sformatf("ENV is running"), $time)
-	// 	#10;
-	// 	`uvm_info("Env",$sformatf("ENV is still running"), $time)
-	// 	#20;
-	// 	`uvm_info("Env",$sformatf("ENV is ending"),$time)
-	// 	phase.drop_objection(this);
-	// endtask : run_phase
+	function void connect_phase(uvm_phase phase);
+		super.connect_phase(phase);
+		apb_agent_u.mon.ap.connect(sbd.analysis_port_if_u);
+		uart_agent_u.mon.ap.connect(sbd.analysis_port_intf_u);
+		axis_agent_master.axis_monitor_h.analysis_port_h.connect(sbd.analysis_port_in);
+		axis_agent_slave.axis_monitor_h.analysis_port_h.connect(sbd.analysis_port_out);
+	endfunction : connect_phase
 endclass : uvm_uart_env
