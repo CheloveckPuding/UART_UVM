@@ -37,9 +37,10 @@ class uvm_apb_uart_cfg_sequence extends uvm_sequence#(apb_transaction);
         data==stop_bit_num;
         pwrite==1;
       });
+      transactions[3] = new();
       assert(transactions[3].randomize() with {
         addr==32'hc;
-        data==loopback;
+        data==0;
         pwrite==1;
       });
       foreach(transactions[i]) begin

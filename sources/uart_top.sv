@@ -35,7 +35,7 @@ module uart_top (
 
 	always_comb begin
 		if (loopback) begin
-			tx = rx;
+			rx = tx;
 		end
 		else begin
 			uart_tx = tx;
@@ -44,7 +44,7 @@ module uart_top (
 	end
 
 
-	axis_uart_tx tx 
+	axis_uart_tx tx_uart 
 	(
 		.clk(clk),
 		.rst_n(rst_n),
@@ -57,7 +57,7 @@ module uart_top (
 		.parity_bit_mode(parity_bit_mode)
 	);
 
-	axis_uart_rx rx 
+	axis_uart_rx rx_uart 
 	(
 		.clk(clk),
 		.rst_n(rst_n),

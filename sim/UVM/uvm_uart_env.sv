@@ -1,5 +1,4 @@
 `include "uvm_macros.svh"
-`include "uvm_uart_scoreboard.sv"
 `include "../../AXIS_UVM_Agent/src/axis_include.svh"
 `include "APB_AGENT/apb_transaction.sv"
 `include "APB_AGENT/apb_sequence.sv"
@@ -8,6 +7,7 @@
 `include "APB_AGENT/apb_monitor.sv"
 `include "APB_AGENT/apb_agent.sv"
 `include "../../UART/UVM/uart_include.sv"
+`include "uvm_uart_scoreboard.sv"
 import uvm_pkg::*;
 class uvm_uart_env extends uvm_env;
 	
@@ -62,7 +62,7 @@ class uvm_uart_env extends uvm_env;
 	function void connect_phase(uvm_phase phase);
 		super.connect_phase(phase);
 		apb_agent_u.mon.ap.connect(sbd.analysis_port_if_u);
-		uart_agent_u.mon.ap.connect(sbd.analysis_port_intf_u);
+		uart_agent_u.mon.ap_port.connect(sbd.analysis_port_intf_u);
 		axis_agent_master.axis_monitor_h.analysis_port_h.connect(sbd.analysis_port_in);
 		axis_agent_slave.axis_monitor_h.analysis_port_h.connect(sbd.analysis_port_out);
 	endfunction : connect_phase
