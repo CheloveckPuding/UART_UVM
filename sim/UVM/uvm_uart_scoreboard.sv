@@ -45,15 +45,20 @@ class uvm_uart_scoreboard #(int TDATA_BYTES = 1) extends uvm_scoreboard;
 
 	function void final_phase(uvm_phase phase);
     	super.final_phase(phase);
+    	// phase.raise_objection(this);
     	foreach(axis_data_q_in[i]) begin
-    		`uvm_info("AXIS_Q",axis_data_q_in[i].convert2string() ,UVM_LOW);
+    		`uvm_info("AXIS_Q_IN",axis_data_q_in[i].convert2string() ,UVM_MEDIUM);
+    	end
+    	foreach(axis_data_q_out[i]) begin
+    		`uvm_info("AXIS_Q_OUT",axis_data_q_out[i].convert2string() ,UVM_MEDIUM);
     	end
     	foreach(apb_transaction_q_if_u[i]) begin
-    		`uvm_info("APB_Q",apb_transaction_q_if_u[i].convert2string() ,UVM_LOW);
+    		`uvm_info("APB_Q",apb_transaction_q_if_u[i].convert2string() ,UVM_MEDIUM);
     	end
     	foreach(uart_trans_q_intf_u[i]) begin
-    		`uvm_info("AXIS_Q",uart_trans_q_intf_u[i].sprint() ,UVM_LOW);
+    		`uvm_info("AXIS_Q",uart_trans_q_intf_u[i].sprint() ,UVM_MEDIUM);
     	end
+    	// phase.drop_objection(this);
     endfunction : final_phase
 	// function void write_if_u (axis_data axis_data_h);
 	//     axis_data_q_in_2.push_back(axis_data_h.tdata);

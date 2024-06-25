@@ -62,7 +62,7 @@ class uvm_uart_env extends uvm_env;
 	function void connect_phase(uvm_phase phase);
 		super.connect_phase(phase);
 		apb_agent_u.mon.ap.connect(sbd.analysis_port_if_u);
-		uart_agent_u.mon.ap_port.connect(sbd.analysis_port_intf_u);
+		// uart_agent_u.mon.ap_port.connect(sbd.analysis_port_intf_u);
 		axis_agent_master.axis_monitor_h.analysis_port_h.connect(sbd.analysis_port_in);
 		axis_agent_slave.axis_monitor_h.analysis_port_h.connect(sbd.analysis_port_out);
 	endfunction : connect_phase

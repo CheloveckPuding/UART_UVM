@@ -12,7 +12,8 @@ class uvm_uart_base_test extends uvm_test;
 
 	axis_sequence_config axis_sequence_in_config;
     axis_sequence_config axis_sequence_out_config;
-
+    uvm_uart_cfg_sequence cfg;
+    uart_sequence uart_seq;
 
 
 	function new(string name = "uvm_uart_base_test", uvm_component parent=null);
@@ -21,6 +22,8 @@ class uvm_uart_base_test extends uvm_test;
 
 	function void build_phase(uvm_phase phase);
 		super.build_phase(phase);
+		cfg = uvm_uart_cfg_sequence::type_id::create("cfg");
+		uvm_config_db #(uvm_uart_cfg_sequence)::set(null, "*", "cfg", cfg);
 		axis_sequence_in = axis_sequence::type_id::create("axis_sequence_in", this);
 	    axis_sequence_out = axis_sequence::type_id::create("axis_sequence_out", this);
 		env = uvm_uart_env::type_id::create("env", this);
@@ -33,14 +36,16 @@ class uvm_uart_base_test extends uvm_test;
 	endfunction : build_phase
 
 	task main_phase(uvm_phase phase);
-		uvm_uart_cfg_sequence uart_seq;
-	    phase.raise_objection(this);
+		uart_sequence uart_seq;
+		if( !uvm_config_db #(uvm_uart_cfg_sequence)::get(this, "", "cfg", cfg) )
+            `uvm_error("", "uvm_config_db::get failed")
+      	phase.raise_objection(this);
 	        fork
 	            axis_sequence_in.start(env.axis_agent_master.axis_sequencer_h);
 	            axis_sequence_out.start(env.axis_agent_slave.axis_sequencer_h);  
-			    repeat(10) begin 
-					uart_seq = uvm_uart_cfg_sequence::type_id::create("uart_seq");
-					assert(uart_seq.randomize() with {delitel_uart == 6;});
+			    repeat(5) begin
+					uart_seq = uart_sequence::type_id::create("uart_seq");
+					assert(uart_seq.randomize());
 			    	uart_seq.start(env.uart_agent_u.seqr);
 			    end
 	        join  
@@ -50,7 +55,7 @@ class uvm_uart_base_test extends uvm_test;
 	task configure_phase(uvm_phase phase);
 		 	uvm_apb_uart_cfg_sequence apb_seq;
 		    apb_seq = uvm_apb_uart_cfg_sequence::type_id::create("apb_seq");
-		    assert(apb_seq.randomize() with {delitel < 15;});
+		    apb_seq.cfg = cfg;
 		    phase.raise_objection( this, "Starting apb_base_seqin main phase" );
 		    $display("%t Starting sequence apb_seq run_phase",$time);
 		    apb_seq.start(env.apb_agent_u.sqr);

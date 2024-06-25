@@ -37,8 +37,8 @@ module axis_uart_rx (
     	if (!rst_n) begin
     		counter <= 0;
     	end else begin
-    		if (state == RECIVE) begin
-				if (counter == div_ct) begin
+    		if (next_state == RECIVE) begin
+				if (counter == div_ct-1) begin
 					counter <= 0;
 				end else begin 
 					counter <= counter + 1;
@@ -62,17 +62,18 @@ module axis_uart_rx (
 	end
 
 	// uart_ce to take data
-	always @(posedge clk or negedge rst_n) begin
-		if (!rst_n) begin
-			uart_ce <= 0;
-		end else if (counter == (div_ct>>1)) begin
-			uart_ce <= 1;
-		end
-		else begin
-			uart_ce <= 0;
-		end
-	end
+	// always @(posedge clk or negedge rst_n) begin
+	// 	if (!rst_n) begin
+	// 		uart_ce <= 0;
+	// 	end else if (counter == (div_ct>>1)-1) begin
+	// 		uart_ce <= 1;
+	// 	end
+	// 	else begin
+	// 		uart_ce <= 0;
+	// 	end
+	// end
 
+	assign uart_ce = (counter==(div_ct>>1)) ? 1:0;
 	// counter to count taken bits
 	always @(posedge clk or negedge rst_n) begin
 		if (!rst_n) begin
@@ -123,7 +124,7 @@ module axis_uart_rx (
 						end
 					endcase
 				end
-				if (data_ct >= 4'ha && data_ct) begin
+				if (data_ct >= 4'ha && data_ct <= bit_ct) begin
 					if (reg_2 != 1) begin
 						err_stop <= 1;
 					end
@@ -171,8 +172,8 @@ module axis_uart_rx (
     // always for setup regs
     always @(posedge clk or negedge rst_n) begin
     	if (!rst_n) begin
-    		div_ct <= 0;
-    		bit_ct <= 0;
+    		div_ct <= 1;
+    		bit_ct <= 4'ha;
     		parity_bit <= 0;
     	end else begin 
 	    	if (state == NOT_RECIVE) begin
