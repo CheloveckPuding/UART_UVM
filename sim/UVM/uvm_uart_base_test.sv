@@ -23,6 +23,7 @@ class uvm_uart_base_test extends uvm_test;
 	function void build_phase(uvm_phase phase);
 		super.build_phase(phase);
 		cfg = uvm_uart_cfg_sequence::type_id::create("cfg");
+		cfg.randomize();
 		uvm_config_db #(uvm_uart_cfg_sequence)::set(null, "*", "cfg", cfg);
 		axis_sequence_in = axis_sequence::type_id::create("axis_sequence_in", this);
 	    axis_sequence_out = axis_sequence::type_id::create("axis_sequence_out", this);

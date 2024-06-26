@@ -1,14 +1,3 @@
-`include "uvm_macros.svh"
-`include "../../AXIS_UVM_Agent/src/axis_include.svh"
-`include "APB_AGENT/apb_transaction.sv"
-`include "APB_AGENT/apb_sequence.sv"
-`include "APB_AGENT/apb_sequencer.sv"
-`include "APB_AGENT/apb_driver.sv"
-`include "APB_AGENT/apb_monitor.sv"
-`include "APB_AGENT/apb_agent.sv"
-`include "../../UART/UVM/uart_include.sv"
-`include "uvm_uart_scoreboard.sv"
-import uvm_pkg::*;
 class uvm_uart_env extends uvm_env;
 	
 	`uvm_component_utils(uvm_uart_env)

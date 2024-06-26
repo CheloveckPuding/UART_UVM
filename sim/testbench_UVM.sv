@@ -1,9 +1,3 @@
-`include "UVM/uvm_uart_base_test.sv" 
-`include "../AXIS_UVM_Agent/src/axis_intf.sv"
-`include "UVM/APB_AGENT/apb_if.sv"
-`include "../UART/UVM/uart_intf.sv"
-import uvm_pkg::*;
-`include "uvm_macros.svh"
 module testbench_UVM ();
     parameter CLOCK_PERIOD = 10;
 
