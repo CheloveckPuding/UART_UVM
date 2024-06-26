@@ -1,8 +1,3 @@
-`include "uvm_macros.svh"
-import uvm_pkg::*;
-`include "uvm_uart_env.sv"
-`include "uvm_apb_uart_cfg_sequence.sv"
-`include "uvm_uart_cfg_sequence.sv"
 class uvm_uart_base_test extends uvm_test;
 	`uvm_component_utils(uvm_uart_base_test)
 
@@ -12,7 +7,7 @@ class uvm_uart_base_test extends uvm_test;
 
 	axis_sequence_config axis_sequence_in_config;
     axis_sequence_config axis_sequence_out_config;
-    uvm_uart_cfg_sequence cfg;
+    uart_agent_cfg cfg;
     uart_sequence uart_seq;
 
 
@@ -22,9 +17,9 @@ class uvm_uart_base_test extends uvm_test;
 
 	function void build_phase(uvm_phase phase);
 		super.build_phase(phase);
-		cfg = uvm_uart_cfg_sequence::type_id::create("cfg");
+		cfg = uart_agent_cfg::type_id::create("cfg");
 		cfg.randomize();
-		uvm_config_db #(uvm_uart_cfg_sequence)::set(null, "*", "cfg", cfg);
+		uvm_config_db #(uart_agent_cfg)::set(null, "*", "cfg", cfg);
 		axis_sequence_in = axis_sequence::type_id::create("axis_sequence_in", this);
 	    axis_sequence_out = axis_sequence::type_id::create("axis_sequence_out", this);
 		env = uvm_uart_env::type_id::create("env", this);
@@ -38,7 +33,7 @@ class uvm_uart_base_test extends uvm_test;
 
 	task main_phase(uvm_phase phase);
 		uart_sequence uart_seq;
-		if( !uvm_config_db #(uvm_uart_cfg_sequence)::get(this, "", "cfg", cfg) )
+		if( !uvm_config_db #(uart_agent_cfg)::get(this, "", "cfg", cfg) )
             `uvm_error("", "uvm_config_db::get failed")
       	phase.raise_objection(this);
 	        fork

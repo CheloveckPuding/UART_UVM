@@ -5,7 +5,7 @@ class uvm_uart_env extends uvm_env;
     virtual axis_if axis_in;
     virtual axis_if axis_out;
     virtual apb_if 	apb_if_u;
-    virtual uart_intf uart_intf_u;
+    // virtual uart_intf uart_intf_u;
 
 	uvm_uart_scoreboard sbd;
 	axis_agent axis_agent_master;
@@ -30,8 +30,8 @@ class uvm_uart_env extends uvm_env;
 	    if (!uvm_config_db #(virtual apb_if  )::get(this, "", "apb_if_u", apb_if_u))
 	        `uvm_fatal("GET_DB", "Can not get apb_if")
 
-	    if (!uvm_config_db #(virtual uart_intf  )::get(this, "", "uart_intf_u", uart_intf_u))
-	        `uvm_fatal("GET_DB", "Can not get uart_intf_u")        
+	    // if (!uvm_config_db #(virtual uart_intf  )::get(this, "", "uart_intf_u", uart_intf_u))
+	    //     `uvm_fatal("GET_DB", "Can not get uart_intf_u")        
 
 		sbd = uvm_uart_scoreboard::type_id::create("sbd", this);
 		axis_agent_master = axis_agent::type_id::create("axis_agent_master", this);
@@ -51,7 +51,8 @@ class uvm_uart_env extends uvm_env;
 	function void connect_phase(uvm_phase phase);
 		super.connect_phase(phase);
 		apb_agent_u.mon.ap.connect(sbd.analysis_port_if_u);
-		// uart_agent_u.mon.ap_port.connect(sbd.analysis_port_intf_u);
+		uart_agent_u.mon.ap_port_tx.connect(sbd.analysis_port_out_intf_u);
+		uart_agent_u.mon.ap_port_rx.connect(sbd.analysis_port_in_intf_u);
 		axis_agent_master.axis_monitor_h.analysis_port_h.connect(sbd.analysis_port_in);
 		axis_agent_slave.axis_monitor_h.analysis_port_h.connect(sbd.analysis_port_out);
 	endfunction : connect_phase

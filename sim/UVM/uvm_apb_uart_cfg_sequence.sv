@@ -7,7 +7,7 @@ class uvm_apb_uart_cfg_sequence extends uvm_sequence#(apb_transaction);
   // rand logic        stop_bit_num;
   // rand logic        loopback;
   apb_transaction transactions [4];
-  uvm_uart_cfg_sequence cfg;
+  uart_agent_cfg cfg;
 
 
   function new (string name = "");
