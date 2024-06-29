@@ -36,7 +36,7 @@ module axis_uart_tx (
     		uart_ce <= 0;
     	end else begin 
 			if (state == TRANCIVE) begin
-				if (counter == div_ct) begin
+				if (counter == (div_ct-1)) begin
 					counter <= 0;
 					uart_ce <= 1;
 				end else begin 
@@ -89,7 +89,7 @@ module axis_uart_tx (
 			uart_data <= saxis_data_i;
 			saxis_tready_o <= 1;
 		end
-		else if (saxis_tvalid_i) begin
+		else if (next_state == TRANCIVE) begin
 			saxis_tready_o <= 0;
 		end
 	end

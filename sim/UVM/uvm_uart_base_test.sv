@@ -44,7 +44,8 @@ class uvm_uart_base_test extends uvm_test;
 					assert(uart_seq.randomize());
 			    	uart_seq.start(env.uart_agent_u.seqr);
 			    end
-	        join  
+	        join
+	        #100;  
 	    phase.drop_objection(this);
 	endtask
 
