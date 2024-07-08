@@ -21,6 +21,7 @@ class uvm_uart_env extends uvm_env;
 	//build_phase
 	function void build_phase(uvm_phase phase);
 		super.build_phase(phase);
+		$display("ok in env");
 		if (!uvm_config_db #(virtual axis_if)::get(this, "", "axis_in", axis_in))
         	`uvm_fatal("GET_DB", "Can not get axis_in_1")
 
@@ -28,10 +29,7 @@ class uvm_uart_env extends uvm_env;
 	        `uvm_fatal("GET_DB", "Can not get axis_out")        
 
 	    if (!uvm_config_db #(virtual apb_if  )::get(this, "", "apb_if_u", apb_if_u))
-	        `uvm_fatal("GET_DB", "Can not get apb_if")
-
-	    // if (!uvm_config_db #(virtual uart_intf  )::get(this, "", "uart_intf_u", uart_intf_u))
-	    //     `uvm_fatal("GET_DB", "Can not get uart_intf_u")        
+	        `uvm_fatal("GET_DB", "Can not get apb_if")      
 
 		sbd = uvm_uart_scoreboard::type_id::create("sbd", this);
 		axis_agent_master = axis_agent::type_id::create("axis_agent_master", this);

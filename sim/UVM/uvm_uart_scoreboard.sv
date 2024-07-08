@@ -50,32 +50,53 @@ class uvm_uart_scoreboard #(int TDATA_BYTES = 1) extends uvm_scoreboard;
 	endfunction
 
 	function void final_phase(uvm_phase phase);
-    	super.final_phase(phase);
+    	int loop_num;
+        super.final_phase(phase);
+        if (!$size(axis_data_q_in)) `uvm_fatal("AXIS_Q_IN","IS EMT");
+        if (!$size(axis_data_q_out))`uvm_fatal("AXIS_Q_OUT","IS EMT");
+        if (!$size(apb_transaction_q_if_u)) `uvm_fatal("APB_Q","IS EMT");
+    	foreach(apb_transaction_q_if_u[i]) begin
+    		`uvm_info("APB_Q",apb_transaction_q_if_u[i].convert2string() ,UVM_MEDIUM);
+            if (apb_transaction_q_if_u[i].addr == 32'hc) begin
+                loop_num = i;
+            end
+    	end
+        $display("apb_data is %0h",~apb_transaction_q_if_u[loop_num].data);
+        if (!$size(uart_trans_q_in_intf_u) && !apb_transaction_q_if_u[loop_num].data)`uvm_fatal("UART_IN","IS EMT");
+        if (!$size(uart_trans_q_out_intf_u) && !apb_transaction_q_if_u[loop_num].data) `uvm_fatal("UART_OUT","IS EMT");
     	foreach(axis_data_q_in[i]) begin
     		`uvm_info("AXIS_Q_IN",axis_data_q_in[i].convert2string() ,UVM_MEDIUM);
     	end
     	foreach(axis_data_q_out[i]) begin
     		`uvm_info("AXIS_Q_OUT",axis_data_q_out[i].convert2string() ,UVM_MEDIUM);
     	end
-    	foreach(apb_transaction_q_if_u[i]) begin
-    		`uvm_info("APB_Q",apb_transaction_q_if_u[i].convert2string() ,UVM_MEDIUM);
-    	end
-    	foreach(uart_trans_q_in_intf_u[i]) begin
-    		`uvm_info("UART_IN",uart_trans_q_in_intf_u[i].convert2string() ,UVM_MEDIUM);
-    	end
-    	foreach(uart_trans_q_out_intf_u[i]) begin
-    		`uvm_info("UART_OUT",uart_trans_q_out_intf_u[i].convert2string() ,UVM_MEDIUM);
-    	end
+        if (!apb_transaction_q_if_u[loop_num].data) begin
+        	foreach(uart_trans_q_in_intf_u[i]) begin
+        		`uvm_info("UART_IN",uart_trans_q_in_intf_u[i].convert2string() ,UVM_MEDIUM);
+        	end
+        	foreach(uart_trans_q_out_intf_u[i]) begin
+        		`uvm_info("UART_OUT",uart_trans_q_out_intf_u[i].convert2string() ,UVM_MEDIUM);
+        	end
+        end
 
-    	foreach(axis_data_q_in[i]) begin
-    		if (axis_data_q_in[i].tdata != uart_trans_q_out_intf_u[i].data) begin
-    			`uvm_error("AXIS_TO_UART",$sformatf("SEND is %0h GOT is %0h",axis_data_q_in[i].tdata, uart_trans_q_out_intf_u[i].data));
-    		end
-    	end
-    	foreach(axis_data_q_out[i]) begin
-    		if (axis_data_q_out[i].tdata != uart_trans_q_in_intf_u[i].data) begin
-    			`uvm_error("UART_TO_AXIS",$sformatf("SEND is %0h GOT is %0h",uart_trans_q_in_intf_u[i].data, axis_data_q_out[i].tdata ));
-    		end
-    	end
+    	if (!apb_transaction_q_if_u[loop_num].data) begin
+            foreach(axis_data_q_in[i]) begin
+        		if (axis_data_q_in[i].tdata != uart_trans_q_out_intf_u[i].data) begin
+        			`uvm_error("AXIS_TO_UART",$sformatf("SEND is %0h GOT is %0h",axis_data_q_in[i].tdata, uart_trans_q_out_intf_u[i].data));
+        		end
+        	end
+        	foreach(axis_data_q_out[i]) begin
+        		if (axis_data_q_out[i].tdata != uart_trans_q_in_intf_u[i].data) begin
+        			`uvm_error("UART_TO_AXIS",$sformatf("SEND is %0h GOT is %0h",uart_trans_q_in_intf_u[i].data, axis_data_q_out[i].tdata ));
+        		end
+        	end
+        end
+        else begin 
+            foreach(axis_data_q_in[i]) begin
+                if (axis_data_q_in[i].tdata != axis_data_q_out[i].tdata) begin
+                    `uvm_error("AXIS_TO_AXIS",$sformatf("SEND is %0h GOT is %0h",axis_data_q_in[i].tdata, axis_data_q_out[i].tdata));
+                end
+            end
+        end
     endfunction : final_phase
 endclass
