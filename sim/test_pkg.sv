@@ -10,4 +10,6 @@ package uart_test_pkg;
 	`include "UVM/uvm_uart_env.sv"
 	`include "UVM/uvm_uart_base_test.sv"
 	`include "UVM/uvm_uart_loopback_test.sv"
+	// `include "UVM/uvm_uart_zero_loopback_test.sv"
+	// `include "UVM/uvm_uart_random_loopback_test.sv"
 endpackage : uart_test_pkg

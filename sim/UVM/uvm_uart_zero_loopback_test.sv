@@ -1,4 +1,4 @@
-class uvm_uart_loopback_test extends uvm_uart_base_test;
+class uvm_uart_zero_loopback_test extends uvm_uart_base_test;
 	`uvm_component_utils(uvm_uart_zero_loopback_test)
 	
 	function new(string name = "", uvm_component parent);
